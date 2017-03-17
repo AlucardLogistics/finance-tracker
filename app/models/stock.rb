@@ -1,5 +1,8 @@
 class Stock < ActiveRecord::Base
   
+  has_many :user_stocks
+  has_many :users, through: :user_stocks
+  
   #def class level methods that are not tied to objects
   #that way Stock class can be used w/o any instances of this class
   #the way is defined is: def self.
@@ -22,10 +25,10 @@ class Stock < ActiveRecord::Base
   #returns the closing price if not the open price if not it will return 'Unavailable'
   def price
     closing_price = StockQuote::Stock.quote(ticker).close
-    return "#{closing_price} Closing" if closing_price
+    return "#{closing_price} (closing)" if closing_price
     
     opening_price = StockQuote::Stock.quote(ticker).open
-    return "#{opening_price} Open" if opening_price
+    return "#{opening_price} (opening)" if opening_price
     'Unavailable'
   end
   
